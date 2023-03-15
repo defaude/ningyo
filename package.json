@@ -1,0 +1,23 @@
+{
+  "name": "ningyo",
+  "version": "1.0.0",
+  "description": "Generates SVGs from Mermaid diagrams.",
+  "author": {
+    "name": "Roland Hummel",
+    "email": "defaude@gmail.com",
+    "url": "https://github.com/defaude"
+  },
+  "license": "cc0-1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node index.js && svgo -f output"
+  },
+  "dependencies": {
+    "@mermaid-js/mermaid-cli": "^10.0.2",
+    "del": "7.0.0",
+    "make-dir": "^3.1.0",
+    "prettier": "^2.8.4",
+    "svgo": "3.0.2"
+  }
+}
