@@ -1,6 +1,6 @@
 # Ningyo
 
-Because we like 🧜‍♀️[Mermaids](https://mermaid.live)!
+Because we like [Mermaid](https://mermaid.live)s!
 
 ![ningyo](https://upload.wikimedia.org/wikipedia/commons/e/ee/Hakoiri_musume_menya_ningyo-f14a-ningyo.jpg)
 
