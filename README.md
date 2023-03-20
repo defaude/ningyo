@@ -21,7 +21,7 @@ into this
 Put your diagram(s) in Markdown files and pass their filenames as parameters to ningyo:
 
 ```shell
-npx ningyo foo.md bar.md baz.md
+npx @defaude/ningyo foo.md bar.md baz.md
 ```
 
 Look at [the reference](https://mermaid.js.org/intro/n00b-syntaxReference.html) to see what you can do with Mermaid.

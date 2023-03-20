@@ -10,9 +10,7 @@
     "url": "https://github.com/defaude"
   },
   "type": "module",
-  "bin": {
-    "ningyo": "index.js"
-  },
+  "bin": "index.js",
   "dependencies": {
     "@mermaid-js/mermaid-cli": "^10.0.2",
     "chalk": "^5.2.0",
