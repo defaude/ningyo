@@ -1,13 +1,59 @@
-import { readdir } from 'node:fs/promises';
-import { deleteAsync } from 'del';
+#!/usr/bin/env node
+import chalk from 'chalk';
+import meow from 'meow';
+import { Listr } from 'listr2';
 import { run } from '@mermaid-js/mermaid-cli';
-import makeDir from 'make-dir';
+import { readFile, stat, writeFile } from 'node:fs/promises';
+import { globby } from 'globby';
+import { optimize } from 'svgo';
 
-const outputPath = 'output';
+const replaceExtension = (filename, replacement) => filename.replace(/\.md$/, replacement);
+const getOutputFilename = (filename) => replaceExtension(filename, '.svg');
+const getOutputGlob = (filename) => replaceExtension(filename, '*.svg');
 
-await deleteAsync(`${outputPath}/*`, { force: true });
-await makeDir(outputPath);
+const helpMessage = `Pass the filename(s) of one or more markdown file(s) containing your diagrams in a code block.
 
-for (const file of await readdir('src')) {
-    await run(`src/${file}`, `${outputPath}/${file.replace(/\.md$/, '.svg')}`);
+Examples:
+
+    ${chalk.bold('ningyo pie-of-truth.md')}
+    ${chalk.bold('ningyo foo.md bar.md')}`;
+
+const cli = meow(helpMessage, { importMeta: import.meta });
+if (cli.input.length === 0) cli.showHelp();
+
+async function checkFile(filename) {
+    if (!filename.endsWith('.md')) throw new TypeError(`${filename} is not a Markdown file`);
+    if (!(await stat(filename)).isFile()) throw new TypeError(`${filename} does not exist`);
+}
+
+async function convertMermaid(filename) {
+    return run(filename, getOutputFilename(filename));
+}
+
+async function optimizeOutput(filename) {
+    const files = await globby([getOutputGlob(filename)]);
+    const promises = files.map(async (file) => {
+        const svg = await readFile(file, { encoding: 'utf-8' });
+        const { data } = optimize(svg);
+        await writeFile(file, data, { encoding: 'utf-8' });
+    });
+    return Promise.all(promises);
+}
+
+const listr = new Listr(
+    cli.input.map((filename) => ({
+        title: filename,
+        task: () =>
+            new Listr([
+                { title: 'checking file', task: () => checkFile(filename) },
+                { title: 'converting mermaid diagram(s) to SVG', task: () => convertMermaid(filename) },
+                { title: 'optimizing SVG output', task: () => optimizeOutput(filename) },
+            ]),
+    }))
+);
+
+try {
+    await listr.run();
+} catch (e) {
+    console.error(chalk.bgRed.bold('Something went wrong. Please check the output above.'));
 }
