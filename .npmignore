@@ -1,1 +1,4 @@
 .prettierrc.json
+.idea
+.vscode
+.DS_Store
