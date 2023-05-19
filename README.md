@@ -24,9 +24,16 @@ Put your diagram(s) in Markdown files and pass their filenames as parameters to 
 npx @defaude/ningyo foo.md bar.md baz.md
 ```
 
+By default, the created SVG files will be optimized with [svgo](https://github.com/svg/svgo). Some diagram styles might
+be broken by this, however. You can skip svgo by adding the `--no-optimize` flag:
+
+```shell
+npx @defaude/ningyo foo.md bar.md baz.md --no-optimize
+```
+
+## Further reading
+
 Look at [the reference](https://mermaid.js.org/intro/n00b-syntaxReference.html) to see what you can do with Mermaid.
 
 Sadly, there are no network / cloud diagrams available at the moment, but with a little effort, it _might_ become
 reality [some time in the future](https://github.com/mermaid-js/mermaid/issues/1227).
-
-By the way: The generated SVG images will be optimized with [svgo](https://github.com/svg/svgo) ✌️

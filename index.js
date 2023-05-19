@@ -13,13 +13,31 @@ const getOutputGlob = (filename) => replaceExtension(filename, '*.svg');
 
 const helpMessage = `Pass the filename(s) of one or more markdown file(s) containing your diagrams in a code block.
 
-Examples:
+${chalk.bold('Usage')}
+    $ ningyo <file> [... <more files>]
 
-    ${chalk.bold('ningyo pie-of-truth.md')}
-    ${chalk.bold('ningyo foo.md bar.md')}`;
+${chalk.bold('Options')}
+    --no-optimize Skip optimizing output with svgo (might help with styling issues)
 
-const cli = meow(helpMessage, { importMeta: import.meta });
+${chalk.bold('Examples')}
+    ningyo pie-of-truth.md          # single file
+    ningyo foo.md bar.md            # multiple files
+    ningyo baz.md --no-optimize     # skip svgo
+`;
+
+const cli = meow(helpMessage, {
+    importMeta: import.meta,
+    flags: {
+        optimize: {
+            type: 'boolean',
+            default: true,
+        },
+    },
+});
+
 if (cli.input.length === 0) cli.showHelp();
+
+const skipSvgo = !cli.flags.optimize;
 
 async function checkFile(filename) {
     if (!filename.endsWith('.md')) throw new TypeError(`${filename} is not a Markdown file`);
@@ -49,7 +67,7 @@ task.add(
             new Listr([
                 { title: 'checking file', task: () => checkFile(filename) },
                 { title: 'converting mermaid diagram(s) to SVG', task: () => convertMermaid(filename) },
-                { title: 'optimizing SVG output', task: () => optimizeOutput(filename) },
+                { title: 'optimizing SVG output', task: () => optimizeOutput(filename), skip: skipSvgo },
             ]),
     }))
 );
