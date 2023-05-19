@@ -40,7 +40,9 @@ async function optimizeOutput(filename) {
     return Promise.all(promises);
 }
 
-const listr = new Listr(
+const task = new Listr();
+
+task.add(
     cli.input.map((filename) => ({
         title: filename,
         task: () =>
@@ -53,7 +55,7 @@ const listr = new Listr(
 );
 
 try {
-    await listr.run();
+    await task.run();
 } catch (e) {
     console.error(chalk.bgRed.bold('Something went wrong. Please check the output above.'));
 }
