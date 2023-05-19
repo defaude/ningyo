@@ -16,12 +16,28 @@ into this
 
 ![The truth about Netflix](test-files/netflix-1.svg)
 
+**OR**
+
+this
+
+```
+stateDiagram-v2
+    [*] --> eat
+    eat --> sleep
+    sleep --> code
+    code --> eat
+```
+
+into this
+
+![The circle of Life](test-files/eat-sleep-code-repeat.svg)
+
 ## Usage
 
-Put your diagram(s) in Markdown files and pass their filenames as parameters to ningyo:
+Put your diagram(s) in `.mmd` or Markdown files and pass their filenames as parameters to ningyo:
 
 ```shell
-npx @defaude/ningyo foo.md bar.md baz.md
+npx @defaude/ningyo foo.mmd bar.md baz.md
 ```
 
 By default, the created SVG files will be optimized with [svgo](https://github.com/svg/svgo). Some diagram styles might

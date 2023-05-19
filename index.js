@@ -7,11 +7,11 @@ import { readFile, stat, writeFile } from 'node:fs/promises';
 import { globby } from 'globby';
 import { optimize } from 'svgo';
 
-const replaceExtension = (filename, replacement) => filename.replace(/\.md$/, replacement);
+const replaceExtension = (filename, replacement) => filename.replace(/\.m?md$/, replacement);
 const getOutputFilename = (filename) => replaceExtension(filename, '.svg');
 const getOutputGlob = (filename) => replaceExtension(filename, '*.svg');
 
-const helpMessage = `Pass the filename(s) of one or more markdown file(s) containing your diagrams in a code block.
+const helpMessage = `Pass the filename(s) of mermaid / markdown file(s).
 
 ${chalk.bold('Usage')}
     $ ningyo <file> [... <more files>]
@@ -21,7 +21,7 @@ ${chalk.bold('Options')}
 
 ${chalk.bold('Examples')}
     ningyo pie-of-truth.md          # single file
-    ningyo foo.md bar.md            # multiple files
+    ningyo foo.mmd bar.mmd          # multiple files
     ningyo baz.md --no-optimize     # skip svgo
 `;
 
@@ -40,7 +40,9 @@ if (cli.input.length === 0) cli.showHelp();
 const skipSvgo = !cli.flags.optimize;
 
 async function checkFile(filename) {
-    if (!filename.endsWith('.md')) throw new TypeError(`${filename} is not a Markdown file`);
+    if (!filename.endsWith('.md') || !filename.endsWith('.mmd')) {
+        throw new TypeError(`${filename} is not a Markdown file`);
+    }
     if (!(await stat(filename)).isFile()) throw new TypeError(`${filename} does not exist`);
 }
 
