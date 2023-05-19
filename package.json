@@ -1,6 +1,6 @@
 {
   "name": "@defaude/ningyo",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Generates SVGs from Mermaid diagrams.",
   "license": "cc0-1.0",
   "repository": "defaude/ningyo",
